@@ -1,9 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, ListView, TouchableOpacity } from 'react-native';
 
+// DEVELOPMENT ONLY
+const API_URL = 'http://localhost:8000' // iOS simulator, web client
+const ALT_API_URL = 'http://10.0.2.2:8000' // Android virtual device simulator
+
+
 class MyComponent extends React.Component {
   constructor() {
     super();
+    console.log("Entered MyComponent constructor")
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       cardList: [],
@@ -11,6 +17,7 @@ class MyComponent extends React.Component {
       cardIndex: [],
       cardText: "",
       loading: true,
+      error: false,
       reverse: false,
       pickedDeck: false,
       dataSource: ds.cloneWithRows(["1", "2", "3"])
@@ -18,7 +25,7 @@ class MyComponent extends React.Component {
   }
 
   loadDeckJson() {
-    fetch('http://localhost:8000/decks').then((response) => {
+    fetch(API_URL+'/decks').then((response) => {
       response.json().then((responseJson) => {
         this.setState({
           loading: false,
@@ -26,11 +33,26 @@ class MyComponent extends React.Component {
           deckList: responseJson.decks
         });
       })
+    }).catch((error) => {
+      fetch(ALT_API_URL+'/decks').then((response) => {
+        response.json().then((responseJson) => {
+          this.setState({
+            loading: false,
+            dataSource: this.state.dataSource.cloneWithRows(responseJson.decks),
+            deckList: responseJson.decks
+          });
+        })
+      }).catch((error) => {
+        console.log(error)
+        this.setState({
+          error: true
+        })
+      })
     }).done();
   }
 
   loadCardJson(deckId) {
-    fetch('http://localhost:8000/decks/'+deckId).then((response) => {
+    fetch(API_URL+'/decks/'+deckId).then((response) => {
       response.json().then((responseJson) => {
         deckSize = responseJson.cards.length
         cardIndex = Math.floor(Math.random()*deckSize)
@@ -41,18 +63,44 @@ class MyComponent extends React.Component {
           cardText: responseJson.cards[cardIndex].side1,
         });
       })
+    }).catch((error) => {
+      fetch(ALT_API_URL+'/decks/'+deckId).then((response) => {
+        response.json().then((responseJson) => {
+          deckSize = responseJson.cards.length
+          cardIndex = Math.floor(Math.random()*deckSize)
+          this.setState({
+            cardList: responseJson.cards,
+            cardIndex: cardIndex,
+            pickedDeck: true,
+            cardText: responseJson.cards[cardIndex].side1,
+          });
+        })
+      }).catch((error) => {
+        console.log(error)
+        this.setState({
+          error: true
+        })
+      })
     }).done();
   }
 
   componentDidMount() {
-    console.log("mounted")
     this.loadDeckJson()
   }
 
   renderLoadingView() {
+    console.log("Returning loading view")
     return (
       <View style={styles.container}>
         <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  renderErrorView() {
+    return (
+      <View style={styles.container}>
+        <Text>Error loading Flashcards!</Text>
       </View>
     );
   }
@@ -62,7 +110,7 @@ class MyComponent extends React.Component {
       <View style={styles.container}>
         <TouchableOpacity style={{
           flex:0.9,
-          width:400,
+          width:350,
           borderWidth:1,
           borderColor:"black",
           alignSelf:"stretch",
@@ -88,7 +136,7 @@ class MyComponent extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity style={{
           flex:0.1,
-          width:400,
+          width:350,
           borderWidth:1,
           borderColor:"black",
           alignSelf:"stretch",
@@ -107,7 +155,6 @@ class MyComponent extends React.Component {
   }
 
   renderListView() {
-    console.log("Hello world!");
     return (
       <ListView
         dataSource={this.state.dataSource}
@@ -122,7 +169,10 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    if(this.state.loading) {
+    if (this.state.error) {
+      return(this.renderErrorView());
+    }
+    else if(this.state.loading) {
       return(this.renderLoadingView());
     }
     else if(this.state.pickedDeck) {
