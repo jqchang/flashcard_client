@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ListView, TouchableOpacity, Dimensions } from 'react-native';
 
 // DEVELOPMENT ONLY
 const API_URL = 'http://localhost:8000' // iOS simulator, web client
 const ALT_API_URL = 'http://10.0.2.2:8000' // Android virtual device simulator
-
+const FONTSIZE = 20
+const DEV_WIDTH = Dimensions.get('window').width
 
 class MyComponent extends React.Component {
   constructor() {
@@ -25,7 +26,9 @@ class MyComponent extends React.Component {
   }
 
   loadDeckJson() {
+    console.log("Loading deck json")
     fetch(API_URL+'/decks').then((response) => {
+      console.log(response)
       response.json().then((responseJson) => {
         this.setState({
           loading: false,
@@ -34,6 +37,7 @@ class MyComponent extends React.Component {
         });
       })
     }).catch((error) => {
+      console.log("Normal URL failed, attempting alternate")
       fetch(ALT_API_URL+'/decks').then((response) => {
         response.json().then((responseJson) => {
           this.setState({
@@ -92,7 +96,7 @@ class MyComponent extends React.Component {
     console.log("Returning loading view")
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text style={{fontSize:FONTSIZE}}>Loading...</Text>
       </View>
     );
   }
@@ -100,7 +104,7 @@ class MyComponent extends React.Component {
   renderErrorView() {
     return (
       <View style={styles.container}>
-        <Text>Error loading Flashcards!</Text>
+        <Text style={{fontSize:FONTSIZE}}>Error loading Flashcards!</Text>
       </View>
     );
   }
@@ -110,12 +114,13 @@ class MyComponent extends React.Component {
       <View style={styles.container}>
         <TouchableOpacity style={{
           flex:0.9,
-          width:350,
+          width:DEV_WIDTH,
           borderWidth:1,
           borderColor:"black",
           alignSelf:"stretch",
           alignItems:"center",
-          justifyContent:"center"
+          justifyContent:"center",
+          padding:25,
         }} onPress={()=>{
           if(!this.state.reverse) {
             this.setState({
@@ -132,23 +137,24 @@ class MyComponent extends React.Component {
             })
           }
         }}>
-          <Text>{this.state.cardText}</Text>
+          <Text style={{fontSize:FONTSIZE}}>{this.state.cardText}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{
           flex:0.1,
-          width:350,
+          width:DEV_WIDTH,
           borderWidth:1,
           borderColor:"black",
           alignSelf:"stretch",
           alignItems:"center",
-          justifyContent:"center"
+          justifyContent:"center",
+          padding:25,
         }} onPress={()=>{
           this.setState({
             pickedDeck: false,
             reverse: false,
           })
         }}>
-          <Text>Back to Deck List</Text>
+          <Text style={{fontSize:FONTSIZE}}>Back to Deck List</Text>
         </TouchableOpacity>
       </View>
     );
@@ -162,7 +168,7 @@ class MyComponent extends React.Component {
           <TouchableOpacity onPress={()=>{
             this.loadCardJson(rowData.id)
           }}>
-            <Text>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
+            <Text style={{fontSize:FONTSIZE}}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
           </TouchableOpacity>}
       />
     );
@@ -196,6 +202,7 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#fff',
