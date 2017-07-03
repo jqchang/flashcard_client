@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View, ListView, TouchableOpacity, Dimensions } from 'react-native';
 
 // DEVELOPMENT ONLY
-const API_URL = 'http://localhost:8000' // iOS simulator, web client
-const ALT_API_URL = 'http://10.0.2.2:8000' // Android virtual device simulator
+const API_URL = 'http://54.183.172.164' // iOS simulator, web client
+const ALT_API_URL = 'http://localhost:8000' // Simulator
 const FONTSIZE = 20
-const DEV_WIDTH = Dimensions.get('window').width
+// const DEV_WIDTH = Dimensions.get('window').width
 
 class MyComponent extends React.Component {
   constructor() {
@@ -114,7 +114,7 @@ class MyComponent extends React.Component {
       <View style={styles.container}>
         <TouchableOpacity style={{
           flex:0.9,
-          width:DEV_WIDTH,
+          width:Dimensions.get('window').width,
           borderWidth:1,
           borderColor:"black",
           alignSelf:"stretch",
@@ -141,7 +141,7 @@ class MyComponent extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity style={{
           flex:0.1,
-          width:DEV_WIDTH,
+          width:Dimensions.get('window').width,
           borderWidth:1,
           borderColor:"black",
           alignSelf:"stretch",
@@ -202,7 +202,6 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: '#fff',
