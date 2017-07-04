@@ -7,7 +7,7 @@ const ALT_API_URL = 'http://localhost:8000' // Simulator
 const FONTSIZE = 20
 // const DEV_WIDTH = Dimensions.get('window').width
 
-class MyComponent extends React.Component {
+class MainView extends React.Component {
   constructor() {
     super();
     console.log("Entered MyComponent constructor")
@@ -28,7 +28,6 @@ class MyComponent extends React.Component {
   loadDeckJson() {
     console.log("Loading deck json")
     fetch(API_URL+'/decks').then((response) => {
-      console.log(response)
       response.json().then((responseJson) => {
         this.setState({
           loading: false,
@@ -96,7 +95,7 @@ class MyComponent extends React.Component {
     console.log("Returning loading view")
     return (
       <View style={styles.container}>
-        <Text style={{fontSize:FONTSIZE}}>Loading...</Text>
+        <Text style={styles.plainText}>Loading...</Text>
       </View>
     );
   }
@@ -104,7 +103,7 @@ class MyComponent extends React.Component {
   renderErrorView() {
     return (
       <View style={styles.container}>
-        <Text style={{fontSize:FONTSIZE}}>Error loading Flashcards!</Text>
+        <Text style={styles.plainText}>Error loading Flashcards!</Text>
       </View>
     );
   }
@@ -112,16 +111,7 @@ class MyComponent extends React.Component {
   renderCardView() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={{
-          flex:0.9,
-          width:Dimensions.get('window').width,
-          borderWidth:1,
-          borderColor:"black",
-          alignSelf:"stretch",
-          alignItems:"center",
-          justifyContent:"center",
-          padding:25,
-        }} onPress={()=>{
+        <TouchableOpacity style={styles.mainView} onPress={()=>{
           if(!this.state.reverse) {
             this.setState({
               reverse: true,
@@ -137,24 +127,15 @@ class MyComponent extends React.Component {
             })
           }
         }}>
-          <Text style={{fontSize:FONTSIZE}}>{this.state.cardText}</Text>
+          <Text style={styles.plainText}>{this.state.cardText}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{
-          flex:0.1,
-          width:Dimensions.get('window').width,
-          borderWidth:1,
-          borderColor:"black",
-          alignSelf:"stretch",
-          alignItems:"center",
-          justifyContent:"center",
-          padding:25,
-        }} onPress={()=>{
+        <TouchableOpacity style={styles.bottomBar} onPress={()=>{
           this.setState({
             pickedDeck: false,
             reverse: false,
           })
         }}>
-          <Text style={{fontSize:FONTSIZE}}>Back to Deck List</Text>
+          <Text style={styles.plainText}>Back to Deck List</Text>
         </TouchableOpacity>
       </View>
     );
@@ -162,15 +143,19 @@ class MyComponent extends React.Component {
 
   renderListView() {
     return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={(rowData) =>
-          <TouchableOpacity onPress={()=>{
-            this.loadCardJson(rowData.id)
-          }}>
-            <Text style={{fontSize:FONTSIZE}}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
-          </TouchableOpacity>}
-      />
+      <View style={styles.container}>
+        <Text style={styles.plainText}>Available Decks:</Text>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) =>
+            <TouchableOpacity style={styles.listItem} onPress={()=>{
+              this.loadCardJson(rowData.id)
+            }}>
+              <Text style={styles.plainText}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
+            </TouchableOpacity>
+          }
+        />
+      </View>
     );
   }
 
@@ -194,8 +179,8 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{flex:0.05}}></View>
-        <MyComponent/>
+        <View style={styles.header}></View>
+        <MainView/>
       </View>
     );
   }
@@ -208,4 +193,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  header: {flex:0.05},
+  plainText: {fontSize:FONTSIZE},
+  mainView:{
+    flex:0.9,
+    width:Dimensions.get('window').width,
+    borderWidth:1,
+    borderColor:"black",
+    alignSelf:"stretch",
+    alignItems:"center",
+    justifyContent:"center",
+    padding:25,
+  },
+  bottomBar:{
+    flex:0.1,
+    width:Dimensions.get('window').width,
+    borderWidth:1,
+    borderColor:"black",
+    alignSelf:"stretch",
+    alignItems:"center",
+    justifyContent:"center",
+    padding:25,
+  },
+  listItem: {
+    width:Dimensions.get('window').width,
+    borderWidth:1,
+    borderColor:"black",
+    padding:10,
+  }
 });
