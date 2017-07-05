@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, ListView, TouchableOpacity, Dimensions } from '
 const API_URL = 'http://54.183.172.164' // iOS simulator, web client
 const ALT_API_URL = 'http://localhost:8000' // Simulator
 const FONTSIZE = 20
+
 // const DEV_WIDTH = Dimensions.get('window').width
 
 class MainView extends React.Component {
@@ -21,10 +22,27 @@ class MainView extends React.Component {
       error: false,
       reverse: false,
       pickedDeck: false,
+      night: true,
       dataSource: ds.cloneWithRows(["1", "2", "3"])
     }
   }
 
+  nightMode(text) {
+    if(this.state.night && text) {
+      return {
+        backgroundColor:"black",
+        borderColor:"white",
+        color:"white"
+      }
+    }
+    else if(this.state.night && !text) {
+      return {
+        backgroundColor:"black",
+        borderColor:"white",
+      }
+    }
+    else return {};
+  }
   loadDeckJson() {
     console.log("Loading deck json")
     fetch(API_URL+'/decks').then((response) => {
@@ -94,7 +112,7 @@ class MainView extends React.Component {
   renderLoadingView() {
     console.log("Returning loading view")
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.nightMode()]}>
         <Text style={styles.plainText}>Loading...</Text>
       </View>
     );
@@ -102,16 +120,16 @@ class MainView extends React.Component {
 
   renderErrorView() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.plainText}>Error loading Flashcards!</Text>
+      <View style={[styles.container, this.nightMode()]}>
+        <Text style={[styles.plainText, this.nightMode(true)]}>Error loading Flashcards!</Text>
       </View>
     );
   }
 
   renderCardView() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.mainView} onPress={()=>{
+      <View style={[styles.container, this.nightMode()]}>
+        <TouchableOpacity style={[styles.mainView, this.nightMode()]} onPress={()=>{
           if(!this.state.reverse) {
             this.setState({
               reverse: true,
@@ -127,15 +145,15 @@ class MainView extends React.Component {
             })
           }
         }}>
-          <Text style={styles.plainText}>{this.state.cardText}</Text>
+          <Text style={[styles.plainText, this.nightMode(true)]}>{this.state.cardText}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBar} onPress={()=>{
+        <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
           this.setState({
             pickedDeck: false,
             reverse: false,
           })
         }}>
-          <Text style={styles.plainText}>Back to Deck List</Text>
+          <Text style={[styles.plainText, this.nightMode(true)]}>Back to Deck List</Text>
         </TouchableOpacity>
       </View>
     );
@@ -143,18 +161,25 @@ class MainView extends React.Component {
 
   renderListView() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.plainText}>Available Decks:</Text>
+      <View style={[styles.container, this.nightMode()]}>
+        <Text style={[styles.plainText, this.nightMode(true)]}>Available Decks:</Text>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={(rowData) =>
-            <TouchableOpacity style={styles.listItem} onPress={()=>{
+            <TouchableOpacity style={[styles.listItem, this.nightMode()]} onPress={()=>{
               this.loadCardJson(rowData.id)
             }}>
-              <Text style={styles.plainText}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
+              <Text style={[styles.plainText, this.nightMode(true)]}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
             </TouchableOpacity>
           }
         />
+        <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
+          this.setState({night:!this.state.night})
+        }}>
+          <Text style={[styles.plainText, this.nightMode(true)]}>
+            Toggle Night Mode
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
