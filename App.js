@@ -2,15 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, ListView, TouchableOpacity, Dimensions } from 'react-native';
 
 // DEVELOPMENT ONLY
-const API_URL = 'http://54.183.172.164' // iOS simulator, web client
+const API_URL = 'http://54.183.172.164' // deployed
 const ALT_API_URL = 'http://localhost:8000' // Simulator
 const FONTSIZE = 20
 
 // const DEV_WIDTH = Dimensions.get('window').width
 
 class MainView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     console.log("Entered MyComponent constructor")
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
@@ -22,29 +22,25 @@ class MainView extends React.Component {
       error: false,
       reverse: false,
       pickedDeck: false,
-      night: true,
-      dataSource: ds.cloneWithRows(["1", "2", "3"])
+      night: false,
+      dataSource: ds.cloneWithRows(["1", "2"])
     }
   }
 
   nightMode(text) {
-    if(this.state.night && text) {
-      return {
-        backgroundColor:"black",
-        borderColor:"white",
-        color:"white"
-      }
+    nightStyle = {
+      backgroundColor:"black",
+      borderColor:"white",
     }
-    else if(this.state.night && !text) {
-      return {
-        backgroundColor:"black",
-        borderColor:"white",
-      }
+    if (text) {
+      nightStyle.color = "white";
+    }
+    if(this.state.night){
+      return nightStyle;
     }
     else return {};
   }
   loadDeckJson() {
-    console.log("Loading deck json")
     fetch(API_URL+'/decks').then((response) => {
       response.json().then((responseJson) => {
         this.setState({
@@ -54,7 +50,6 @@ class MainView extends React.Component {
         });
       })
     }).catch((error) => {
-      console.log("Normal URL failed, attempting alternate")
       fetch(ALT_API_URL+'/decks').then((response) => {
         response.json().then((responseJson) => {
           this.setState({
@@ -110,7 +105,6 @@ class MainView extends React.Component {
   }
 
   renderLoadingView() {
-    console.log("Returning loading view")
     return (
       <View style={[styles.container, this.nightMode()]}>
         <Text style={styles.plainText}>Loading...</Text>
@@ -121,7 +115,7 @@ class MainView extends React.Component {
   renderErrorView() {
     return (
       <View style={[styles.container, this.nightMode()]}>
-        <Text style={[styles.plainText, this.nightMode(true)]}>Error loading Flashcards!</Text>
+        <Text style={[styles.plainText, this.nightMode(true)]}>Error connecting to flashcard server!</Text>
       </View>
     );
   }
@@ -165,16 +159,21 @@ class MainView extends React.Component {
         <Text style={[styles.plainText, this.nightMode(true)]}>Available Decks:</Text>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) =>
-            <TouchableOpacity style={[styles.listItem, this.nightMode()]} onPress={()=>{
-              this.loadCardJson(rowData.id)
-            }}>
-              <Text style={[styles.plainText, this.nightMode(true)]}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
-            </TouchableOpacity>
-          }
+          renderRow={(rowData) => {
+            return (
+              <TouchableOpacity style={[styles.listItem, this.nightMode()]} onPress={()=>{
+                this.loadCardJson(rowData.id)
+              }}>
+                <Text style={[styles.plainText, this.nightMode(true)]}>{rowData.name+" - "+rowData.num_cards+" card(s)"}</Text>
+              </TouchableOpacity>
+            )
+          }}
         />
         <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
-          this.setState({night:!this.state.night})
+          this.setState({
+            night:!this.state.night,
+          });
+          this.loadDeckJson()
         }}>
           <Text style={[styles.plainText, this.nightMode(true)]}>
             Toggle Night Mode
