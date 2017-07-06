@@ -6,7 +6,7 @@ const API_URL = 'http://54.183.172.164' // deployed
 const ALT_API_URL = 'http://localhost:8000' // Simulator
 const FONTSIZE = 20
 
-// const DEV_WIDTH = Dimensions.get('window').width
+// const DEV_WIDTH = Dimensions.get('window').width())
 
 class MainView extends React.Component {
   constructor(props) {
@@ -146,6 +146,7 @@ class MainView extends React.Component {
             pickedDeck: false,
             reverse: false,
           })
+          this.loadDeckJson()
         }}>
           <Text style={[styles.plainText, this.nightMode(true)]}>Back to Deck List</Text>
         </TouchableOpacity>
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  header: {flex:0.05},
+  header: {flex:0.025},
   plainText: {fontSize:FONTSIZE},
   mainView:{
     flex:0.9,
