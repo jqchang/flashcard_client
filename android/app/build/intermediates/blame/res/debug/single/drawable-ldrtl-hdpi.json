@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/drawable-ldrtl-hdpi/abc_spinner_mtrl_am_alpha.9.png",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/drawable-ldrtl-hdpi/abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/drawable-ldrtl-hdpi/abc_ic_menu_cut_mtrl_alpha.png",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/drawable-ldrtl-hdpi/abc_ic_menu_cut_mtrl_alpha.png"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/drawable-ldrtl-hdpi/abc_ic_ab_back_mtrl_am_alpha.png",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/drawable-ldrtl-hdpi/abc_ic_ab_back_mtrl_am_alpha.png"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/drawable-ldrtl-hdpi/abc_ic_menu_copy_mtrl_am_alpha.png",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/drawable-ldrtl-hdpi/abc_ic_menu_copy_mtrl_am_alpha.png"
+    }
+]

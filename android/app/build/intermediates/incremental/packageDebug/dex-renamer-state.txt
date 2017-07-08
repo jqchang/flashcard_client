@@ -1,0 +1,4 @@
+#Sat Jul 08 15:50:33 PDT 2017
+base.0=/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
+renamed.0=classes.dex
+file.0=/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex

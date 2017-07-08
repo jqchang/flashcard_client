@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_primary_text_disable_only_material_light.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/switch_thumb_material_dark.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/switch_thumb_material_dark.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_primary_text_disable_only_material_dark.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_primary_text_disable_only_material_dark.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/switch_thumb_material_light.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/switch_thumb_material_light.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_primary_text_material_light.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_primary_text_material_light.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_secondary_text_material_light.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_secondary_text_material_light.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_secondary_text_material_dark.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_secondary_text_material_dark.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_primary_text_material_dark.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_primary_text_material_dark.xml"
+    },
+    {
+        "merged": "/Users/jqchang/Code/Python/Flashcard/flashcard_client/android/app/build/intermediates/res/merged/debug/color/abc_search_url_text.xml",
+        "source": "/Users/jqchang/.android/build-cache/e3e7b19f89187fb9d3118f07da8d515e9740cb7f/output/res/color/abc_search_url_text.xml"
+    }
+]
