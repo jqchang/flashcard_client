@@ -204,7 +204,7 @@ class MainView extends React.Component {
             <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
               this.state.knownCards[this.state.cardList[this.state.cardIndex].id] = true;
               AsyncStorage.setItem('known', JSON.stringify(Object.keys(this.state.knownCards))).then(() => {
-                renderNextCard();
+                this.renderNextCard();
               });
             }}>
               <Text style={[styles.plainText, this.nightMode(true)]}>Already know!</Text>
@@ -212,7 +212,7 @@ class MainView extends React.Component {
             <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
               this.state.unknownCards[this.state.cardList[this.state.cardIndex].id] = true;
               AsyncStorage.setItem('unknown', JSON.stringify(Object.keys(this.state.unknownCards))).then(() => {
-                renderNextCard();
+                this.renderNextCard();
               });
             }}>
               <Text style={[styles.plainText, this.nightMode(true)]}>Not yet...</Text>
