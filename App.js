@@ -16,6 +16,8 @@ class MainView extends React.Component {
       cardList: [],
       deckList: [],
       cardIndex: [],
+      knownCards: {},
+      unknownCards: {},
       cardText: "",
       loading: true,
       error: false,
@@ -100,11 +102,35 @@ class MainView extends React.Component {
     }).done();
   }
 
-  getStoredNightMode() {
-    return AsyncStorage.getItem('night').then(value => {
-      if(value === "true") value = true;
-      else value = false;
-      this.setState({night:Boolean(value)})
+  getPersistentData() {
+    AsyncStorage.getAllKeys().then(value=> {
+      console.log(value);
+    })
+    AsyncStorage.getItem('known').then(value => {
+      if(value !== null) {
+        // console.log("known:",value)
+        for(var i of JSON.parse(value)){
+          this.state.knownCards[i] = true
+        }
+        console.log("known:",this.state.knownCards);
+      }
+    }).done();
+    AsyncStorage.getItem('unknown').then(value => {
+      if(value !== null) {
+        // console.log("unknown:",value)
+        for(var i of JSON.parse(value)) {
+          this.state.unknownCards[i] = true
+        }
+        console.log("unknown:",this.state.unknownCards);
+      }
+    }).done();
+    AsyncStorage.getItem('night').then(value => {
+      if(value !== null) {
+        // console.log("night:",value)
+        if(value === "true") value = true;
+        else value = false;
+        this.setState({night:Boolean(value)})
+      }
     })
   }
 
@@ -114,7 +140,10 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
-    this.getStoredNightMode();
+    // DEBUG: RUN ONCE
+    // AsyncStorage.clear();
+    // END DEBUG
+    this.getPersistentData();
     this.loadDeckJson();
   }
 
@@ -145,25 +174,73 @@ class MainView extends React.Component {
             })
           }
           else {
-            nextCard = Math.floor(Math.random()*this.state.cardList.length)
             this.setState({
               reverse: false,
-              cardIndex: nextCard,
-              cardText: this.state.cardList[nextCard].side1,
+              cardText: this.state.cardList[this.state.cardIndex].side1,
             })
           }
         }}>
           <Text style={[styles.plainText, this.nightMode(true)]}>{this.state.cardText}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
-          this.setState({
-            pickedDeck: false,
-            reverse: false,
-          })
-          this.loadDeckJson()
-        }}>
-          <Text style={[styles.plainText, this.nightMode(true)]}>Back to Deck List</Text>
-        </TouchableOpacity>
+        <View style={[styles.container, {flex:0.2}, this.nightMode()]}>
+          <View style={[styles.container, {flexDirection:"row"}, this.nightMode()]}>
+            <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
+              console.log("alreadyKnow =",this.state.cardList[this.state.cardIndex].id)
+              this.state.knownCards[this.state.cardList[this.state.cardIndex].id] = true;
+              AsyncStorage.setItem('known', JSON.stringify(Object.keys(this.state.knownCards))).then(() => {
+                var findCard = true
+                while(findCard) {
+                  nextCard = Math.floor(Math.random()*this.state.cardList.length)
+                  if(!this.state.knownCards[this.state.cardList[nextCard].id]) {
+                    findCard = false;
+                  }
+                  else {
+                    console.log("Skipping",this.state.cardList[nextCard].id)
+                  }
+                }
+                this.setState({
+                  reverse: false,
+                  cardIndex: nextCard,
+                  cardText: this.state.cardList[nextCard].side1,
+                })
+              });
+            }}>
+              <Text style={[styles.plainText, this.nightMode(true)]}>Already know!</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
+              this.state.unknownCards[this.state.cardList[this.state.cardIndex].id] = true;
+              AsyncStorage.setItem('unknown', JSON.stringify(Object.keys(this.state.unknownCards))).then(() => {
+                console.log("Unknown:",Object.keys(this.state.unknownCards))
+                var findCard = true
+                while(findCard) {
+                  nextCard = Math.floor(Math.random()*this.state.cardList.length)
+                  if(!this.state.knownCards[this.state.cardList[nextCard].id]) {
+                    findCard = false;
+                  }
+                  else {
+                    console.log("Skipping",this.state.cardList[nextCard].id)
+                  }
+                }
+                this.setState({
+                  reverse: false,
+                  cardIndex: nextCard,
+                  cardText: this.state.cardList[nextCard].side1,
+                })
+              });
+            }}>
+              <Text style={[styles.plainText, this.nightMode(true)]}>Not yet...</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
+            this.setState({
+              pickedDeck: false,
+              reverse: false,
+            })
+            this.loadDeckJson()
+          }}>
+            <Text style={[styles.plainText, this.nightMode(true)]}>Back to Deck List</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
