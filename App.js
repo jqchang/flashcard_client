@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ListView, TouchableOpacity, Dimensions, AsyncStorage } from 'react-native';
 
 // DEVELOPMENT ONLY
 const API_URL = 'http://54.183.172.164' // deployed
@@ -11,7 +11,6 @@ const FONTSIZE = 20
 class MainView extends React.Component {
   constructor(props) {
     super(props);
-    console.log("Entered MyComponent constructor")
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       cardList: [],
@@ -40,6 +39,7 @@ class MainView extends React.Component {
     }
     else return {};
   }
+
   loadDeckJson() {
     fetch(API_URL+'/decks').then((response) => {
       response.json().then((responseJson) => {
@@ -100,8 +100,22 @@ class MainView extends React.Component {
     }).done();
   }
 
+  getStoredNightMode() {
+    return AsyncStorage.getItem('night').then(value => {
+      if(value === "true") value = true;
+      else value = false;
+      this.setState({night:Boolean(value)})
+    })
+  }
+
+  setNight = (value) => {
+    this.setState({night:value})
+    return AsyncStorage.setItem('night', JSON.stringify(value));
+  }
+
   componentDidMount() {
-    this.loadDeckJson()
+    this.getStoredNightMode();
+    this.loadDeckJson();
   }
 
   renderLoadingView() {
@@ -171,10 +185,9 @@ class MainView extends React.Component {
           }}
         />
         <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
-          this.setState({
-            night:!this.state.night,
-          });
-          this.loadDeckJson()
+          this.setNight(!this.state.night).then(()=> {
+            this.loadDeckJson()
+          })
         }}>
           <Text style={[styles.plainText, this.nightMode(true)]}>
             Toggle Night Mode
