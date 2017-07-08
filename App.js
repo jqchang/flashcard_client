@@ -163,6 +163,23 @@ class MainView extends React.Component {
     );
   }
 
+  renderNextCard() {
+    var findCard = true
+    while(findCard) {
+      nextCard = Math.floor(Math.random()*this.state.cardList.length)
+      if(!this.state.knownCards[this.state.cardList[nextCard].id]) {
+        findCard = false;
+      }
+      else {
+        console.log("Skipping",this.state.cardList[nextCard].id)
+      }
+    }
+    this.setState({
+      reverse: false,
+      cardIndex: nextCard,
+      cardText: this.state.cardList[nextCard].side1,
+    })
+  }
   renderCardView() {
     return (
       <View style={[styles.container, this.nightMode()]}>
@@ -185,24 +202,9 @@ class MainView extends React.Component {
         <View style={[styles.container, {flex:0.2}, this.nightMode()]}>
           <View style={[styles.container, {flexDirection:"row"}, this.nightMode()]}>
             <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
-              console.log("alreadyKnow =",this.state.cardList[this.state.cardIndex].id)
               this.state.knownCards[this.state.cardList[this.state.cardIndex].id] = true;
               AsyncStorage.setItem('known', JSON.stringify(Object.keys(this.state.knownCards))).then(() => {
-                var findCard = true
-                while(findCard) {
-                  nextCard = Math.floor(Math.random()*this.state.cardList.length)
-                  if(!this.state.knownCards[this.state.cardList[nextCard].id]) {
-                    findCard = false;
-                  }
-                  else {
-                    console.log("Skipping",this.state.cardList[nextCard].id)
-                  }
-                }
-                this.setState({
-                  reverse: false,
-                  cardIndex: nextCard,
-                  cardText: this.state.cardList[nextCard].side1,
-                })
+                renderNextCard();
               });
             }}>
               <Text style={[styles.plainText, this.nightMode(true)]}>Already know!</Text>
@@ -210,22 +212,7 @@ class MainView extends React.Component {
             <TouchableOpacity style={[styles.bottomBar, this.nightMode()]} onPress={()=>{
               this.state.unknownCards[this.state.cardList[this.state.cardIndex].id] = true;
               AsyncStorage.setItem('unknown', JSON.stringify(Object.keys(this.state.unknownCards))).then(() => {
-                console.log("Unknown:",Object.keys(this.state.unknownCards))
-                var findCard = true
-                while(findCard) {
-                  nextCard = Math.floor(Math.random()*this.state.cardList.length)
-                  if(!this.state.knownCards[this.state.cardList[nextCard].id]) {
-                    findCard = false;
-                  }
-                  else {
-                    console.log("Skipping",this.state.cardList[nextCard].id)
-                  }
-                }
-                this.setState({
-                  reverse: false,
-                  cardIndex: nextCard,
-                  cardText: this.state.cardList[nextCard].side1,
-                })
+                renderNextCard();
               });
             }}>
               <Text style={[styles.plainText, this.nightMode(true)]}>Not yet...</Text>
